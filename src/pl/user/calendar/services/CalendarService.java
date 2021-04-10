@@ -163,28 +163,26 @@ public class CalendarService {
         //Finding all possibilities to organize a meeting
         for (DayHours f : firstPossibleMeetings) {
             DayHours currentValue = f;
+            List<DayHours> valueToSave = new ArrayList <>();
             for (DayHours s : secondPossibleMeetings) {
-                if ( currentValue.getStart().compareTo(s.getStart()) >= 0 && currentValue.getEnd().compareTo(s.getEnd()) <= 0 ) {
-                } else if ( currentValue.getStart().compareTo(s.getStart()) < 0 && currentValue.getEnd().compareTo(s.getEnd()) <= 0 && currentValue.getEnd().compareTo(s.getStart()) > 0 ) {
-                    currentValue.setStart(s.getStart());
-                } else if ( currentValue.getStart().compareTo(s.getStart()) >= 0 && currentValue.getEnd().compareTo(s.getEnd()) > 0 && currentValue.getStart().compareTo(s.getEnd()) < 0 ) {
-                    currentValue.setEnd(s.getEnd());
-                } else if ( currentValue.getStart().compareTo(s.getStart()) > 0 && currentValue.getEnd().compareTo(s.getEnd()) < 0 ) {
-                    currentValue.setStart(s.getStart());
-                    currentValue.setEnd(s.getEnd());
+                if ( currentValue.getStart().compareTo(s.getStart()) <= 0 && currentValue.getEnd().compareTo(s.getEnd()) >= 0 ) {
+                    valueToSave.add(new DayHoursBuilder().setStart(s.getStart()).setEnd(s.getEnd()).createDayHours());
+                } else if ( currentValue.getStart().compareTo(s.getStart()) <= 0 && currentValue.getEnd().compareTo(s.getEnd()) <= 0 && currentValue.getEnd().compareTo(s.getStart()) > 0 ) {
+                    valueToSave.add(new DayHoursBuilder().setStart(s.getStart()).setEnd(currentValue.getEnd()).createDayHours());
+                } else if ( currentValue.getStart().compareTo(s.getStart()) >= 0 && currentValue.getEnd().compareTo(s.getEnd()) >= 0 && currentValue.getStart().compareTo(s.getEnd()) < 0 ) {
+                    valueToSave.add(new DayHoursBuilder().setStart(currentValue.getStart()).setEnd(s.getEnd()).createDayHours());
+                } else if ( currentValue.getStart().compareTo(s.getStart()) >= 0 && currentValue.getEnd().compareTo(s.getEnd()) <= 0 ) {
+                    valueToSave.add(new DayHoursBuilder().setStart(currentValue.getStart()).setEnd(currentValue.getEnd()).createDayHours());
                 }
             }
-            if(currentValue == f){
-                int count = 0;
-                for (DayHours s : secondPossibleMeetings) {
-                    if((currentValue.getEnd().compareTo(s.getStart()) < 0) || (currentValue.getStart().compareTo(s.getEnd()) >= 0) ) count++;
-                }
-                if(count == secondPossibleMeetings.size()) continue;
-            }
+
             //Check if the time slots found are long enough to organize the meeting
-            if ( Math.abs(Duration.between(currentValue.getStart() , currentValue.getEnd()).toMinutes()) >= meetingDurationMinutes ) {
-                schedules.add(currentValue);
-            }
+            valueToSave.forEach(v -> {
+                if ( Math.abs(Duration.between(v.getStart() , v.getEnd()).toMinutes()) >= meetingDurationMinutes ) {
+                    schedules.add(v);
+                }
+            });
+
         }
         //Return all meeting options
         return schedules;
