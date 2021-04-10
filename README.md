@@ -3,7 +3,7 @@
 ### The program compares 2 calendars and returns all meeting options
 
 ##### SAMPLE INPUT AND OUTPUT:
-## Enter first Calendar
+## Enter the first Calendar
     {
     working_hours: {
     start: "09:00",
@@ -24,7 +24,7 @@
     }
     ]
     }
-## Enter second Calendar
+## Enter the second Calendar
     {
     working_hours: {
     start: "10:00",
@@ -49,7 +49,7 @@
     }
     ]
     }
-## Enter meeting duration ([hh:mm])
+## Enter the meeting duration ([hh:mm])
     [00:30]
     
 ## Output
