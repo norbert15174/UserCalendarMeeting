@@ -39,17 +39,17 @@ public class CalendarService {
         try {
             //First calendar
             Scanner scan = new Scanner(System.in);
-            System.out.println("Enter first Calendar");
+            System.out.println("Enter the first Calendar");
             String firstCalendar = readCalendar(scan);
             checkIfCalendarCorrect(firstCalendar);
 
             //Second calendar
-            System.out.println("Enter second Calendar");
+            System.out.println("Enter the second Calendar");
             String secondCalendar = readCalendar(scan);
             checkIfCalendarCorrect(secondCalendar);
 
             //Meeting duration
-            System.out.println("Enter meeting duration ([hh:mm])");
+            System.out.println("Enter the meeting duration ([hh:mm])");
             String meetingDuration = scan.nextLine();
             checkIfMeetingDurationCorrect(meetingDuration);
 
@@ -81,9 +81,9 @@ public class CalendarService {
     public static UserCalendar createUserCalendar(String calendar) throws UserCalendarCanNotBeCreatedException {
 
         //Extracting data
-        String splitCalendar[] = calendar.split(",planned_meeting");
-        String splitWorkingHours[] = splitCalendar[0].split(" \"");
-        String splitPlannedMeetings[] = splitCalendar[1].split("},");
+        String[] splitCalendar = calendar.split(",planned_meeting");
+        String[] splitWorkingHours = splitCalendar[0].split(" \"");
+        String[] splitPlannedMeetings = splitCalendar[1].split("},");
 
         //Getting working hours
         DayHours working = createDayHours(splitWorkingHours[1].substring(0 , 5) , splitWorkingHours[2].substring(0 , 5));
